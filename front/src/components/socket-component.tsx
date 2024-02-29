@@ -1,25 +1,46 @@
-'use client'
+"use client";
 
-import { useEffect } from "react";
-import { io } from 'socket.io-client';
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export default function SocketComponent() {
+  const [data, setData] = useState({});
 
-    useEffect(() => {
-        const socket = io('http://localhost:8080');
+  useEffect(() => {
+    const socket = io("http://localhost:8080");
 
-        socket.on('init', (data: any) => {
-            console.log('Datos de usuarios recibidos:', data);
-            // Aquí puedes manejar la lógica para procesar los datos recibidos
-        });
+    socket.on("init", (data: any) => {
+      delete data.total;
+      setData(data);
+      console.log("init");
+    });
 
-        return () => {
-            socket.disconnect();
-        };
-    }, []);
+    socket.on("sync", (data: any) => {
+      delete data.total;
+      setData(data);
+      console.log("sync");
+    });
 
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
-    return (
-        <div>socket-component</div>
-    )
+  return (
+    <div className="w-full grid grid-cols-4 gap-4">
+      {Object.entries(data).map(([key, value]) => (
+        <Card key={key}>
+          <CardHeader>
+            <CardTitle className="uppercase">{key}</CardTitle>
+            {/* <CardDescription>Card Description</CardDescription> */}
+          </CardHeader>
+          <CardContent className="text-2xl text-end">{`${value}`}</CardContent>
+          {/* <CardFooter>
+            <p>Card Footer</p>
+          </CardFooter> */}
+        </Card>
+      ))}
+    </div>
+  );
 }

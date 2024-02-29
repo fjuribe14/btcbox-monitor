@@ -14,13 +14,13 @@ datasource db {
 }
 
 model tb_operacion {
-  id_operacion Int      @id @default(autoincrement())
-  in_btcbox    Int      @default(0)
-  in_csmf      Int      @default(0)
-  in_core      Int      @default(0)
-  in_inm       Int      @default(0)
-  created_at   DateTime @default(now())
-  updated_at   DateTime
+  id_operacion Int       @id @default(autoincrement())
+  in_btcbox    Int       @default(0)
+  in_csmf      Int       @default(0)
+  in_core      Int       @default(0)
+  in_inm       Int       @default(0)
+  created_at   DateTime  @default(now())
+  updated_at   DateTime?
 }
 
 // model tb_operacion_salida {

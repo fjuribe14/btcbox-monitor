@@ -1,5 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { DB } from "../db";
+import logger from "../logger";
 
 export const events = {
   connected(socket: Socket) {
@@ -11,10 +12,18 @@ export const events = {
     });
   },
   async init(io: Server) {
-    // await DB.$queryRaw`select count(*)::integer as total, st_operacion as status from tb_operacion_salida tos group by st_operacion`.then(
-    //   (data) => {
-    //     io.emit("init", data);
-    //   }
-    // );
+    try {
+      const result: any[] = await DB.$queryRaw`select 
+        count(*)::int as total,
+        sum(in_btcbox)::int as btcbox,
+        sum(in_csmf)::int as csmf,
+        sum(in_core)::int as core,
+        sum(in_inm)::int as inm
+        from tb_operacion to2;`;
+
+      io.emit("init", result[0]);
+    } catch (err) {
+      logger.error(err);
+    }
   },
 };
