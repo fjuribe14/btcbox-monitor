@@ -1,30 +1,20 @@
-import { Server } from 'socket.io';
-import { PrismaClient } from '@prisma/client';
-import http from 'http';
+import { Server, Socket } from "socket.io";
+import http from "http";
 
-const prisma = new PrismaClient();
+// import { DB } from "./db";
+import "./tasks";
+import { events } from "./events";
 
 const server = http.createServer();
-const io = new Server(server, { cors: { origin: '*' } });
+const io = new Server(server, { cors: { origin: "*" } });
 
-io.on('connection', async (socket) => {
-  console.log(`Socket ${socket.id} connected`);
-
+io.on("connection", async (socket: Socket) => {
+  events.connected(socket);
   events.init(io);
-
-  io.on('disconnect', () => {
-    console.log(`Socket ${socket.id} disconnected`);
-  })
+  events.disconnected(socket);
+  // io.on("disconnect", () => console.log(`Socket ${socket.id} disconnected`));
 });
 
 server.listen(8080, () => {
   console.log(`Server listening on port 8080`);
 });
-
-export const events = {
-  async init(io: Server) {
-    await prisma.$queryRaw`select count(*)::integer as total, st_operacion as status from tb_operacion_salida tos group by st_operacion`.then((data) => {
-      io.emit('init', data);
-    });
-  }
-}
