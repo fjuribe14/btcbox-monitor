@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import logger from "../logger";
-import { DB } from "../db";
+// import { DB } from "../db";
 
 const randomNumber = Math.floor(Math.random() * 100);
 
@@ -15,10 +15,10 @@ export class SendOperationTask {
 
   async startOperation() {
     try {
-      const result = await DB.tb_operacion.createMany({
-        data: Array.from({ length: randomNumber }).map(() => ({})),
-      });
-      logger.info(`Operation #${result.count} has been created`);
+      // const result = await DB.tb_operacion.createMany({
+      //   data: Array.from({ length: randomNumber }).map(() => ({})),
+      // });
+      // logger.info(`Operation #${result.count} has been created`);
     } catch (err) {
       logger.error(err);
     }

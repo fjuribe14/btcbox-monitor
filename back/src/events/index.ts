@@ -1,5 +1,4 @@
 import { Server, Socket } from "socket.io";
-import { DB } from "../db";
 import logger from "../logger";
 
 export const events = {
@@ -11,19 +10,5 @@ export const events = {
       console.log(`Socket ${socket.id} disconnected`);
     });
   },
-  async init(io: Server) {
-    try {
-      const result: any[] = await DB.$queryRaw`select 
-        count(*)::int as total,
-        sum(in_btcbox)::int as btcbox,
-        sum(in_csmf)::int as csmf,
-        sum(in_core)::int as core,
-        sum(in_inm)::int as inm
-        from tb_operacion to2;`;
-
-      io.emit("init", result[0]);
-    } catch (err) {
-      logger.error(err);
-    }
-  },
+  async init(io: Server) {},
 };
