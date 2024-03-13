@@ -8,7 +8,7 @@ export default function SocketComponent() {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    const socket = io("http://localhost:8080");
+    const socket = io("http://192.168.0.111:8080");
 
     socket.on("init", (data: any) => {
       delete data.total;
