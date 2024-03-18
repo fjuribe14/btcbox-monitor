@@ -6,7 +6,7 @@ import { config } from "dotenv";
 import { Server, Socket } from "socket.io";
 
 import { events } from "../events";
-import { router } from "../routes";
+import routes from "../routes";
 
 //
 config();
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //
-app.use("/", router);
+Object.values(routes).forEach((r) => app.use("/", r));
 
 //
 export const server = http.createServer(app);

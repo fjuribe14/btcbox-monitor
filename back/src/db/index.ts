@@ -10,6 +10,6 @@ export const corebcv = new Sequelize({
   database: process.env.DATABASE_NAME || "postgres",
   username: process.env.DATABASE_USER || "postgres",
   password: process.env.DATABASE_PASSWORD || "postgres",
-  schema: process.env.DATABASE_SCHEMA || "public",
+  schema: process.env.DATABASE_SCHEMA?.toUpperCase() || "public",
   ssl: process.env.DATABASE_SSL === "true",
 });
